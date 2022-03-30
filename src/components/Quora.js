@@ -1,11 +1,13 @@
 import React from "react";
 import Navbar from "./Navbar";
+import Sidebar from "./Sidebar";
 
 function Quora() {
   return (
-    <div className="quora">
+    <>
       <Navbar />
-    </div>
+      <Sidebar />
+    </>
   );
 }
 
