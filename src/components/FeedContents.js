@@ -11,10 +11,10 @@ import React from "react";
 
 function FeedContents() {
   return (
-    <div className="flex flex-col p-[10px] border border-[lightgreen] bg-white rounded-[5px] cursor-pointer mt-[10px] hover:boder-2 hover:border-[olive]">
+    <div className="flex flex-col p-[10px] border border-green-600 bg-white rounded-[5px] cursor-pointer mt-[10px] hover:boder-2 hover:border-[olive]">
       <div className="flex items-center">
         <Avatar />
-        <h5 className="text-[yellowgreen] ml-[10px] cursor-pointer text-[13px] hover:underline">
+        <h5 className="text-green-600 ml-[10px] cursor-pointer text-[13px] hover:underline">
           유저 아이디
         </h5>
         <small className="ml-[10px]">작성 시간</small>
@@ -22,7 +22,7 @@ function FeedContents() {
       <div className="flex flex-col">
         <div className="my-[10px] font-bold cursor-pointer flex">
           <p className="hover:underline">질문내용 입니다</p>
-          <button className="ml-auto outline-none border-none bg-[lightgoldenrodyellow] text-[yellowgreen] rounded-[10px] p-[10px] hover:scale-110">
+          <button className="ml-auto outline-none border-none bg-[lightgoldenrodyellow] text-green-600 rounded-[10px] p-[10px] hover:scale-110">
             답변하기
           </button>
         </div>
