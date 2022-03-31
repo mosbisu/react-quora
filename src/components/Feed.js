@@ -23,8 +23,7 @@ function Feed() {
   return (
     <div className="flex flex-[0.6] flex-col">
       <FeedTop />
-      <FeedContents />
-      {feeds.map(({ id, question }) => {
+      {feeds.map(({ id, question }) => (
         <FeedContents
           key={id}
           Id={id}
@@ -32,8 +31,8 @@ function Feed() {
           question={question.question}
           timestamp={question.timestamp}
           quoraUser={question.user}
-        />;
-      })}
+        />
+      ))}
     </div>
   );
 }
