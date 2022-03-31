@@ -3,12 +3,20 @@ import React, { useState } from "react";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
 } from "firebase/auth";
 import { authService } from "../firebase";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const signIn = async (e) => {
+    let provider;
+    provider = new GoogleAuthProvider();
+    await signInWithPopup(authService, provider);
+  };
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
@@ -56,7 +64,9 @@ function Login() {
                 src="https://media-public.canva.com/MADnBiAubGA/3/screen.svg"
                 alt=""
               />
-              <p className="ml-[11px]">구글 아이디로 로그인</p>
+              <p onClick={signIn} className="ml-[11px]">
+                구글 아이디로 로그인
+              </p>
             </div>
             <div className="flex items-center p-[7px] mb-[15px] border border-[lightgray] rounded-[5px] cursor-pointer hover:bg-[#EFEFEF]">
               <img
