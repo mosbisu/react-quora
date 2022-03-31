@@ -9,19 +9,21 @@ import {
 } from "@material-ui/icons";
 import React from "react";
 
-function FeedContents() {
+function FeedContents({ key, Id, image, question, timestamp, quoraUser }) {
   return (
     <div className="flex flex-col p-[10px] border border-green-600 bg-white rounded-[5px] cursor-pointer mt-[10px] hover:boder-2 hover:border-[olive]">
       <div className="flex items-center">
-        <Avatar />
+        <Avatar src={quoraUser.photo} />
         <h5 className="text-green-600 ml-[10px] cursor-pointer text-[13px] hover:underline">
-          유저 아이디
+          {quoraUser.displayName ? quoraUser.displayName : quoraUser.email}
         </h5>
-        <small className="ml-[10px]">작성 시간</small>
+        <small className="ml-[10px]">
+          {new Date(timestamp?.toDate()).toLocaleString()}
+        </small>
       </div>
       <div className="flex flex-col">
         <div className="my-[10px] font-bold cursor-pointer flex">
-          <p className="hover:underline">질문내용 입니다</p>
+          <p className="hover:underline">{question}</p>
           <button className="ml-auto outline-none border-none bg-[lightgoldenrodyellow] text-green-600 rounded-[10px] p-[10px] hover:scale-110">
             답변하기
           </button>
@@ -31,7 +33,7 @@ function FeedContents() {
         </div>
         <img
           className="object-contain w-full rounded-[5px] cursor-pointer"
-          src=""
+          src={image}
           alt=""
         />
       </div>
