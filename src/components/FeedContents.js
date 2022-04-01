@@ -27,7 +27,7 @@ import { selectUser } from "../features/userSlice";
 import { dbService } from "../firebase";
 // Modal.setAppElement("#root");
 
-function FeedContents({ key, Id, image, question, timestamp, quoraUser }) {
+function FeedContents({ Id, image, question, timestamp, quoraUser }) {
   const [openModal, setOpenModal] = useState(false);
   const [answer, setAnswer] = useState("");
   const dispatch = useDispatch();
