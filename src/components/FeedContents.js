@@ -7,15 +7,81 @@ import {
   RepeatOneOutlined,
   ShareOutlined,
 } from "@material-ui/icons";
-import React, { useState } from "react";
+import {
+  addDoc,
+  collection,
+  onSnapshot,
+  orderBy,
+  query,
+  serverTimestamp,
+} from "firebase/firestore";
+import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  selectQuestionId,
+  selectQuestionName,
+  setQuestionInfo,
+} from "../features/questionSlice";
+import { selectUser } from "../features/userSlice";
+import { dbService } from "../firebase";
 // Modal.setAppElement("#root");
 
 function FeedContents({ key, Id, image, question, timestamp, quoraUser }) {
   const [openModal, setOpenModal] = useState(false);
+  const [answer, setAnswer] = useState("");
+  const dispatch = useDispatch();
+  const user = useSelector(selectUser);
+  const questionId = useSelector(selectQuestionId);
+  const questionName = useSelector(selectQuestionName);
+  const [getAnswer, setGetAnswer] = useState([]);
+
+  useEffect(() => {
+    if (questionId) {
+      onSnapshot(
+        query(collection(dbService, "answers"), orderBy("timestamp", "desc")),
+        (snapshot) => {
+          const answerArray = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            answers: doc.data(),
+          }));
+          setGetAnswer(answerArray);
+        }
+      );
+    }
+  }, [questionId]);
+
+  const handleAnswer = async (e) => {
+    e.preventDefault();
+
+    if (questionId) {
+      const answers = {
+        questionId: questionId,
+        timestamp: serverTimestamp(),
+        answer: answer,
+        user: user,
+      };
+      await addDoc(collection(dbService, "answers"), answers);
+      console.log(questionId, questionName);
+      setAnswer("");
+      setOpenModal(false);
+    }
+  };
 
   return (
-    <div className="flex flex-col p-[10px] border border-green-600 bg-white rounded-[5px] cursor-pointer mt-[10px] hover:border-2 hover:border-[olive]">
+    <div
+      className="flex flex-col p-[10px] border border-green-600 bg-white rounded-[5px] cursor-pointer mt-[10px] hover:border-2 hover:border-[olive]"
+      onClick={() => {
+        console.log(Id);
+        console.log(questionId);
+        dispatch(
+          setQuestionInfo({
+            questionId: Id,
+            questionName: question,
+          })
+        );
+      }}
+    >
       <div className="flex items-center">
         <Avatar src={quoraUser.photo} />
         <h5 className="text-green-600 ml-[10px] cursor-pointer text-[13px] hover:underline">
@@ -74,6 +140,10 @@ function FeedContents({ key, Id, image, question, timestamp, quoraUser }) {
                 className="w-full h-[300px] p-[5px] text-[15px] text-black border"
                 type="text"
                 placeholder="답변을 작성해주세요"
+                value={answer}
+                onChange={(e) => {
+                  setAnswer(e.target.value);
+                }}
               />
             </div>
 
@@ -81,6 +151,7 @@ function FeedContents({ key, Id, image, question, timestamp, quoraUser }) {
               <button
                 className="border-none outline-none mt-[5px] mr-[10px] text-white bg-[blue] font-bold p-[10px] rounded-[33px] cursor-pointer"
                 type="submit"
+                onClick={handleAnswer}
               >
                 답변달기
               </button>
@@ -94,7 +165,28 @@ function FeedContents({ key, Id, image, question, timestamp, quoraUser }) {
           </Modal>
         </div>
         <div>
-          <p>답변입니다</p>
+          {getAnswer.map(({ id, answers }) => (
+            <p className="relative pb-[5px]" key={id}>
+              {Id === answers.questionId ? (
+                <span>
+                  {answers.answer}
+                  <br />
+                  <span className="absolute text-[yellowgreen] text-sm flex right-0">
+                    <span className="text-[#b92b27]">
+                      {answers.user.displayName
+                        ? answers.user.displayName
+                        : answers.user.email}
+                    </span>
+                    {"  "}
+                    {new Date(answers.timestamp?.toDate()).toLocaleString()}에
+                    작성됨
+                  </span>
+                </span>
+              ) : (
+                ""
+              )}
+            </p>
+          ))}
         </div>
         <img
           className="object-contain w-full rounded-[5px] cursor-pointer"
