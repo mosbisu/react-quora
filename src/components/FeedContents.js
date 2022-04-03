@@ -62,7 +62,6 @@ function FeedContents({ Id, image, question, timestamp, quoraUser }) {
         user: user,
       };
       await addDoc(collection(dbService, "answers"), answers);
-      console.log(questionId, questionName);
       setAnswer("");
       setOpenModal(false);
     }
@@ -72,8 +71,6 @@ function FeedContents({ Id, image, question, timestamp, quoraUser }) {
     <div
       className="flex flex-col p-[10px] border border-green-600 bg-white rounded-[5px] cursor-pointer mt-[10px] hover:border-2 hover:border-[olive]"
       onClick={() => {
-        console.log(Id);
-        console.log(questionId);
         dispatch(
           setQuestionInfo({
             questionId: Id,
